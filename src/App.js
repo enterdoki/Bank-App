@@ -21,6 +21,7 @@ class App extends Component {
       credits: [],
       debitTotal: 0,
       creditTotal: 0
+      
     }
   }
 
@@ -79,7 +80,7 @@ class App extends Component {
     let newDebit = this.state.debits.concat([{
       description: item,
       amount: amounts,
-      date: Date.now()
+      date: new Date().toLocaleString()
     }]);
 
     let newTotal = this.state.debitTotal + parseInt(amounts);
@@ -95,7 +96,7 @@ class App extends Component {
     let newCredit = this.state.credits.concat([{
       description: item,
       amount: amounts,
-      date: Date.now()
+      date: new Date().toLocaleString()
     }]);
 
     let newTotal = this.state.creditTotal + parseInt(amounts);
