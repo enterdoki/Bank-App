@@ -17,10 +17,8 @@ class App extends Component {
         userName: "Tom",
         memberSince: "07/29/2019"
       },
-      data: [],
+      debits: [],
       debitTotal: 0,
-      fetched: false,
-      loggedIn: false
     }
   }
 
@@ -34,12 +32,12 @@ class App extends Component {
   }
 
   componentDidMount = () => {
-    this.grabData()
+    this.grabDebit()
   }
 
   calculateDebit = () => {
     let total = 0;
-    for(let i of this.state.data) {
+    for(let i of this.state.debits) {
         total += i.amount;
     }
     this.setState({
@@ -47,44 +45,46 @@ class App extends Component {
     })
   }
 
-  async grabData(){    
+  handleAddNewDebit = (item, amounts) => {
+    let newDebit = this.state.debits.concat([{
+      description: item,
+      amount: amounts,
+      date: Date.now()
+    }]);
+
+    let newTotal = this.state.debitTotal + parseInt(amounts);
+    this.setState({
+      debits: newDebit,
+      debitTotal : newTotal
+    }) 
+  }
+
+  async grabDebit(){    
     await axios.get('https://moj-api.herokuapp.com/debits')
     .then (response => {
       let result = response.data;
       this.setState({
-        data: result,
-        fetched:true
+        debits: result
       })
     }) 
     .catch(err => console.log(err));
-      this.setState({
-        fetched:false
-      })
       
-    
   }
 
   render () {
-    const HomeComponent = () => (<Home accountBalance={this.state.accountBalance} total={this.state.debitTotal}/>);
+    const HomeComponent = () => (<Home accountBalance={this.state.accountBalance} debitTotal={this.state.debitTotal}/>);
     const UserProfileComponent = () => (<UserProfile userName = {this.state.currentUser.userName} memberSince = {this.state.currentUser.memberSince}/>);
     const LogInComponent = () => (<LogIn user={this.state.currentUser} handleLogIn={this.handleLogIn} {...this.props}/>)
-    const DebitComponent = () => (<Debit data = {this.state.data} total = {this.state.debitTotal}/>)
+    const DebitComponent = () => (<Debit debits = {this.state.debits} debitTotal = {this.state.debitTotal} handleAddNewDebit = {this.handleAddNewDebit}/>)
     const CreditComponenet = () => (<Credit/>)
     return (
       <Router>
         <Switch>
-            <Route exact path = "/" 
-              render={() => (
-                this.state.loggedIn ? (
-                  <Redirect to ="/userProfile" component={UserProfileComponent}/>
-                  ): (
-                  <Redirect to ="/logIn" component = {LogInComponent}/>)
-                  )}/>
+            <Route exact path = "/" render={LogInComponent}/>
             <Route exact path = "/userProfile" component={UserProfileComponent}/>
-            <Route exact path = "/logIn" component = {LogInComponent}/>
             <Route exact path = "/home" component = {HomeComponent}/>
-            <Route exact path = "/home/debit" component = {DebitComponent}/>
-            <Route exact path = "/home/credit" component = {CreditComponenet}/>
+            <Route exact path = "/debit" component = {DebitComponent}/>
+            <Route exact path = "/credit" component = {CreditComponenet}/>
         </Switch>
       </Router>
     );

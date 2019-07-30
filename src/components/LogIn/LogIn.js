@@ -9,7 +9,7 @@ class LogIn extends Component {
                 userName: "",
                 passWord: ""
             },
-            redirect: false
+            
         }
     }
 
@@ -27,31 +27,27 @@ class LogIn extends Component {
     handleSubmit = e => {
         e.preventDefault()
         this.props.handleLogIn(this.state.user)
-        this.setState({
-            redirect:true
-        });
-        
+        this.setState({redirect: true})
     }
     render () {
+        if (this.state.redirect) {
+            return (<Redirect to="/userProfile"/>)
+          }
         return (
-        <div>
-        <form onSubmit={this.handleSubmit}>
-          <div>
-            <label htmlFor="userName">User Name</label>
-            <input type="text" name="userName" onChange={this.handleChange} value={this.state.user.userName} />
-          </div>
-          <div>
-            <label htmlFor="password">Password</label>
-            <input type="password" name="password" />
-          </div>
-          <button>Log In</button>
-          
-        </form>
-            {!this.state.redirect ? (
-                  <Redirect to ="/userProfile"/>
-                  ): (
-                  <Redirect to ="/logIn"/>)
-            }
+        <div className = "login">
+            <form onSubmit={this.handleSubmit}>
+            <div>
+                <label htmlFor="userName">User Name</label>
+                <input type="text" name="userName" onChange={this.handleChange} value={this.state.user.userName} />
+            </div>
+            <div>
+                <label htmlFor="password">Password</label>
+                <input type="password" name="password" />
+            </div>
+            <button>Log In</button>
+            
+            </form>
+           
       </div>
         );
 

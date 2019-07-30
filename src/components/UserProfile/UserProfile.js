@@ -6,13 +6,13 @@ import "./UserProfile.css";
 class UserProfile extends Component {
     render () {
         return (
-            <div>
+            <div className = "user">
                 <Link to ="/home">Home</Link>
                 <h1>User Profile</h1>
                 <div>Username: {this.props.userName}</div>
                 <div>Member Since: {this.props.memberSince}</div>
 
-                <Link to ="/logIn">Logout</Link>              
+                <Link to ="/">Logout</Link>              
             </div>
         );
     }

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Redirect } from 'react-router-dom';
 import {Link} from 'react-router-dom';
+import Cards from "./Cards/Cards";
 import "./Debit.css";
 
 class Debit extends Component {
@@ -29,14 +30,19 @@ class Debit extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault()
-        this.props.addDebits(this.state.item, this.state.amount);
+        this.props.handleAddNewDebit(this.state.item, this.state.amount);
     }
    
     render () {
-        const data = this.props.data;
+        let debits = [];
+        for (let i of this.props.debits){
+            debits.push(
+            <Cards description = {i.description} amount = {i.amount} date = {i.date}></Cards>
+            );
+        }
         
         return (
-            <div>
+            <div className = "main-debit">
                 <Link to ="/home">Home</Link>
                 <div><h1>Total Debit:</h1></div>
                 
@@ -51,10 +57,16 @@ class Debit extends Component {
                 </div>
                 <button>Add Debit</button>
           
-        </form>
+                </form>
+                <div className = "cards">
+                    {debits}
+                   
+                </div>
             </div>
         );
     }
 }
+
+
 
 export default Debit;
