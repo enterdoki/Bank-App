@@ -7,13 +7,12 @@ class Home extends Component {
     render () {
         return (
             <div className = "home">
-              <h1>Bank of Narnia</h1>
+              <h1>Bank of React</h1>
               
-              <Link to ="/userProfile">User Profile</Link>
-              <AccountBalance accountBalance = {this.props.accountBalance} debitTotal = {this.props.debitTotal}/>
-              <strong>Debit Total: {this.props.debitTotal}</strong><br></br>
+              <Link to ="/userProfile">User Profile</Link><br></br>
               <Link to ="/debit">Debit</Link><br></br>
               <Link to ="/credit">Credit</Link>
+              <AccountBalance accountBalance = {this.props.accountBalance} debitTotal = {this.props.debitTotal} creditTotal = {this.props.creditTotal}/>
             </div>
         );
     }

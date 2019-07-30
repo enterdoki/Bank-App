@@ -18,7 +18,9 @@ class App extends Component {
         memberSince: "07/29/2019"
       },
       debits: [],
+      credits: [],
       debitTotal: 0,
+      creditTotal: 0
     }
   }
 
@@ -29,10 +31,12 @@ class App extends Component {
       currentUser: newUser
     })
     this.calculateDebit();
+    this.calculateCredit();
   }
 
   componentDidMount = () => {
     this.grabDebit()
+    this.grabCredit()
   }
 
   calculateDebit = () => {
@@ -41,11 +45,22 @@ class App extends Component {
         total += i.amount;
     }
     this.setState({
-      debitTotal: total
+      debitTotal: total,
+    })
+  }
+
+  calculateCredit = () => {
+    let total = 0;
+    for(let i of this.state.credits) {
+        total += i.amount;
+    }
+    this.setState({
+      creditTotal: total,
     })
   }
 
   handleAddNewDebit = (item, amounts) => {
+    let currentBalance = this.state.accountBalance
     let newDebit = this.state.debits.concat([{
       description: item,
       amount: amounts,
@@ -55,7 +70,24 @@ class App extends Component {
     let newTotal = this.state.debitTotal + parseInt(amounts);
     this.setState({
       debits: newDebit,
-      debitTotal : newTotal
+      debitTotal : newTotal,
+      accountBalance: currentBalance - newTotal
+    }) 
+  }
+
+  handleAddNewCredit = (item, amounts) => {
+    let currentBalance = this.state.accountBalance
+    let newCredit = this.state.credits.concat([{
+      description: item,
+      amount: amounts,
+      date: Date.now()
+    }]);
+
+    let newTotal = this.state.creditTotal + parseInt(amounts);
+    this.setState({
+      credits: newCredit,
+      creditTotal : newTotal,
+      accountBalance: currentBalance - newTotal
     }) 
   }
 
@@ -67,16 +99,28 @@ class App extends Component {
         debits: result
       })
     }) 
+    .catch(err => console.log(err));  
+    console.log(this.state.debits)
+  }
+
+  async grabCredit(){    
+    await axios.get('https://moj-api.herokuapp.com/credits')
+    .then (response => {
+      let result = response.data;
+      this.setState({
+        credits: result
+      })
+    }) 
     .catch(err => console.log(err));
-      
+    console.log(this.state.credits);  
   }
 
   render () {
-    const HomeComponent = () => (<Home accountBalance={this.state.accountBalance} debitTotal={this.state.debitTotal}/>);
+    const HomeComponent = () => (<Home accountBalance={this.state.accountBalance} debitTotal={this.state.debitTotal} creditTotal = {this.state.creditTotal}/>);
     const UserProfileComponent = () => (<UserProfile userName = {this.state.currentUser.userName} memberSince = {this.state.currentUser.memberSince}/>);
     const LogInComponent = () => (<LogIn user={this.state.currentUser} handleLogIn={this.handleLogIn} {...this.props}/>)
-    const DebitComponent = () => (<Debit debits = {this.state.debits} debitTotal = {this.state.debitTotal} handleAddNewDebit = {this.handleAddNewDebit}/>)
-    const CreditComponenet = () => (<Credit/>)
+    const DebitComponent = () => (<Debit accountBalance = {this.state.accountBalance} debits = {this.state.debits} debitTotal = {this.state.debitTotal} handleAddNewDebit = {this.handleAddNewDebit}/>)
+    const CreditComponenet = () => (<Credit accountBalance = {this.state.accountBalance} credits = {this.state.credits} creditTotal = {this.state.creditTotal} handleAddNewCredit = {this.handleAddNewCredit}/>)
     return (
       <Router>
         <Switch>
