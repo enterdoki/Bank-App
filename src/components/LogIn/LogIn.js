@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
 import { Redirect } from 'react-router-dom'
+import "./LogIn.css"
 
 class LogIn extends Component {
     constructor () {
@@ -37,38 +36,19 @@ class LogIn extends Component {
           }
         return (
         <div className = "login">
+            <h1 className = "title">BANK APP</h1>
+            <form onSubmit={this.handleSubmit}>
             <div>
-            <TextField
-                    label="Enter Username"
-                    placeholder="John"
-                    className="TextField"
-                    margin="normal"
-                    variant="outlined"
-                    onChange={this.handleChange}
-                    
-                    
-                />
+                <label htmlFor="userName">User Name: </label>
+                <input type="text" name="userName" onChange={this.handleChange} value={this.state.user.userName} />
             </div>
             <div>
-            <TextField
-                    label="Enter Password"
-                    placeholder=""
-                    className="TextField"
-                    margin="normal"
-                    variant="outlined"
-                    onChange={this.handleChange}
-                    
-                    
-                />
+                <label htmlFor="password">Password: </label>
+                <input type="password" name="password" />
             </div>
-                <Button
-                    variant="outlined"
-                    size="large"
-                    color="primary"
-                    onClick={this.handleSubmit}
-                >
-                    Log In
-                </Button>
+            <button>Log In</button>
+            
+            </form>
       </div>
         );
 

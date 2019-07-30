@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import { Redirect } from 'react-router-dom'
 import {Link} from 'react-router-dom';
 import Cards from "./Cards/Cards";
 import "./Credit.css";

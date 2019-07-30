@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import LogIn from "../LogIn/LogIn";
 import {Link} from 'react-router-dom';
 import "./UserProfile.css";
 
