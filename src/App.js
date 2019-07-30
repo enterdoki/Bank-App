@@ -12,7 +12,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      accountBalance: 14568.27,
+      accountBalance: 0,
       currentUser: {
         userName: "Tom",
         memberSince: "07/29/2019"
@@ -32,6 +32,7 @@ class App extends Component {
     })
     this.calculateDebit();
     this.calculateCredit();
+    this.calculateTotal()
   }
 
   componentDidMount = () => {
@@ -57,6 +58,20 @@ class App extends Component {
     this.setState({
       creditTotal: total,
     })
+  }
+
+  calculateTotal = () => {
+    let debitTotal = 0;
+    for(let i of this.state.debits) {
+      debitTotal += i.amount;
+    }
+    let creditTotal = 0;
+    for (let i of this.state.credits){
+      creditTotal += i.amount;
+    }
+    this.setState({
+      accountBalance: creditTotal - debitTotal
+      })
   }
 
   handleAddNewDebit = (item, amounts) => {
